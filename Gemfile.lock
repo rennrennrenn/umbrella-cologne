@@ -1,12 +1,16 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    byebug (9.1.0)
+    json (2.1.0)
     rack (2.0.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  byebug
+  json
   rack
 
 BUNDLED WITH
