@@ -5,6 +5,7 @@ require 'json'
 require 'byebug'
 
 
+
 def need_umbrella
   query = URI.escape("select * from weather.forecast where woeid = '20066504' and u = 'c' &format=json")
 
@@ -31,6 +32,7 @@ view = <<-HTML
   <!DOCTYPE html>
   <html>
     <head>
+       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/base-min.css"> 
       <title>umbrellaCologne</title>
     </head>
     <body>
