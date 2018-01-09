@@ -6,10 +6,13 @@ require 'byebug'
 
 
 class WeatherService
+  RAIN_CODES = %w(1 3 4 5 6 7 9 10 11 12 13 14 15 16 17 18 35 37 38 39 40 41 42 43 45 46 47)
+
+  attr_accessor :weather_data 
+
   def call(_env)
     Rack::Response.new(ERB.new(view).result(binding))
   end
-
 
   def view 
     <<-HTML
@@ -34,25 +37,33 @@ class WeatherService
   private
 
   def need_umbrella
+    retrive_weather_data
+
+    if rainy_later? && rainy_now?
+      "YES! Take your umbrella with you! It will be bad weather the whole day!"
+    elsif rainy_later?
+      "YES! Take your umbrella with you! It will be bad weather later!"
+    elsif rainy_now?
+      "YES! It's raining now! But it will be better weather later!"
+    else
+      "You don't need an umbrella!"
+    end
+  end
+
+  def rainy_now?
+    RAIN_CODES.include?(@weather_data["condition"]["code"])
+  end
+
+  def rainy_later?
+    RAIN_CODES.include?(@weather_data["forecast"].first["code"])
+  end
+
+  def retrive_weather_data
     query = URI.escape("select * from weather.forecast where woeid = '20066504' and u = 'c' &format=json")
-
     uri = URI("https://query.yahooapis.com/v1/public/yql?q=#{query}")
-
     response = Net::HTTP.get(uri)
 
-    weather_forecast = JSON.parse(response)
-
-    raincodes = %w(0 1 2 3 4 5 6 7 9 10 11 12 13 14 15 16 17 18 35 37 38 39 40 41 42 43 45 46 47)
-
-    if raincodes.any? { |umbrella_condition| weather_forecast["query"]["results"]["channel"]["item"]["forecast"].first["code"] == umbrella_condition}
-      if raincodes.any? { |umbrella_condition| weather_forecast["query"]["results"]["channel"]["item"]["condition"]["code"] == umbrella_condition}
-        "YES! Take your ambrella with you! It will be bad weather the whole day!"
-      else
-        "YES! Take your ambrella with you! It will be bad weather later!"
-      end
-    else
-      "You don't need an ambrella!"
-    end
+    @weather_data = JSON.parse(response)["query"]["results"]["channel"]["item"]
   end
 end
 
