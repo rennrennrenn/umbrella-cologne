@@ -7,8 +7,11 @@ require 'byebug'
 
 class WeatherService
   RAIN_CODES = %w(1 3 4 5 6 7 9 10 11 12 13 14 15 16 17 18 35 37 38 39 40 41 42 43 45 46 47)
+  attr_accessor :weather_data
 
-  attr_accessor :weather_data 
+  def initialize
+    retrive_weather_data
+  end
 
   def call(_env)
     Rack::Response.new(ERB.new(view).result(binding))
