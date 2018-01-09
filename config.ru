@@ -55,8 +55,8 @@ class WeatherService
   end
 
   def retrive_weather_data
-    query = URI.escape("select * from weather.forecast where woeid = '20066504' and u = 'c' &format=json")
-    uri = URI("https://query.yahooapis.com/v1/public/yql?q=#{query}")
+    query = URI.escape("select * from weather.forecast where woeid = '20066504' and u = 'c' ")
+    uri = URI("https://query.yahooapis.com/v1/public/yql?q=#{query}&format=json")
     response = Net::HTTP.get(uri)
 
     @weather_data = JSON.parse(response)["query"]["results"]["channel"]["item"]
