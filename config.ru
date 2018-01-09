@@ -10,7 +10,6 @@ class WeatherService
     Rack::Response.new(ERB.new(view).result(binding))
   end
 
-  private
 
   def view 
     <<-HTML
@@ -32,6 +31,7 @@ class WeatherService
     HTML
   end
 
+  private
 
   def need_umbrella
     query = URI.escape("select * from weather.forecast where woeid = '20066504' and u = 'c' &format=json")
