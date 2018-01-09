@@ -57,7 +57,7 @@ class WeatherService
 end
 
 
-use Rackstatic
+#use Rackstatic
 
 run WeatherService.new
 #run ->(env){Rack::Response.new(ERB.new(view).result(binding))}
