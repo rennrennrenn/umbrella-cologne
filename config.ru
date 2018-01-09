@@ -39,14 +39,10 @@ class WeatherService
   def need_umbrella
     retrive_weather_data
 
-    if rainy_later? && rainy_now?
-      "YES! Take your umbrella with you! It will be bad weather the whole day!"
-    elsif rainy_later?
-      "YES! Take your umbrella with you! It will be bad weather later!"
-    elsif rainy_now?
-      "YES! It's raining now! But it will be better weather later!"
+    if rainy_now? || rainy_later?
+      "YES! It will be bad weather today"
     else
-      "You don't need an umbrella!"
+      "No! Looks like there will be no rain today"
     end
   end
 
