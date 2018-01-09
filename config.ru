@@ -10,6 +10,29 @@ class WeatherService
     Rack::Response.new(ERB.new(view).result(binding))
   end
 
+  private
+
+  def view 
+    <<-HTML
+      <!DOCTYPE html>
+      <html>
+        <head>
+           <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/base-min.css"> 
+          <title>umbrellaCologne</title>
+        </head>
+        <body>
+          <div>
+            <h1>Cologne:</h1>
+          </div>
+          <div>
+            <%= need_umbrella %>
+          </div>
+        </body>
+      </html>
+    HTML
+  end
+
+
   def need_umbrella
     query = URI.escape("select * from weather.forecast where woeid = '20066504' and u = 'c' &format=json")
 
@@ -31,27 +54,10 @@ class WeatherService
       "You don't need an ambrella!"
     end
   end
-
-  def view 
-    <<-HTML
-      <!DOCTYPE html>
-      <html>
-        <head>
-           <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/base-min.css"> 
-          <title>umbrellaCologne</title>
-        </head>
-        <body>
-          <div>
-            <h1>Cologne:</h1>
-          </div>
-          <div>
-            <%= need_umbrella %>
-          </div>
-        </body>
-      </html>
-    HTML
-  end
 end
+
+
+use Rackstatic
 
 run WeatherService.new
 #run ->(env){Rack::Response.new(ERB.new(view).result(binding))}
