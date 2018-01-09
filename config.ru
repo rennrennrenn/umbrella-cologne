@@ -17,7 +17,7 @@ class WeatherService
     Rack::Response.new(ERB.new(view).result(binding))
   end
 
-  def view 
+  def view
     <<-HTML
       <!DOCTYPE html>
       <html>
@@ -27,7 +27,10 @@ class WeatherService
         </head>
         <body>
           <div>
-            <h1>Cologne:</h1>
+            <h1>Cologne: <%= Time.now.to_date %></h1>
+          </div>
+          <div>
+            CURRENT: <%= courrent_condition %>
           </div>
           <div>
             <%= need_umbrella %>
@@ -39,9 +42,11 @@ class WeatherService
 
   private
 
-  def need_umbrella
-    retrive_weather_data
+def courrent_condition
+  "#{@weather_data["condition"]["text"].upcase} (#{@weather_data["condition"]["temp"]} &deg;C)"
+end
 
+  def need_umbrella
     if rainy_now? || rainy_later?
       "YES! It will be bad weather today"
     else
