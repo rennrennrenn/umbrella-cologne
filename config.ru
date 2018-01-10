@@ -58,7 +58,7 @@ class WeatherService
   private
 
 def courrent_condition
-  "#{@weather_data["condition"]["text"].upcase} (#{@weather_data["condition"]["temp"]} &deg;C)"
+  "#{@weather_data.condition.text.upcase} (#{@weather_data.condition.temp} &deg;C)"
 end
 
   def need_umbrella
@@ -70,11 +70,11 @@ end
   end
 
   def rainy_now?
-    RAIN_CODES.include?(@weather_data["condition"]["code"])
+    RAIN_CODES.include?(@weather_data.condition.code)
   end
 
   def rainy_later?
-    RAIN_CODES.include?(@weather_data["forecast"].first["code"])
+    RAIN_CODES.include?(@weather_data.forecast.first["code"])
   end
 
   def retrive_weather_data
@@ -82,7 +82,7 @@ end
     uri = URI("https://query.yahooapis.com/v1/public/yql?q=#{query}&format=json")
     response = Net::HTTP.get(uri)
 
-    JSON.parse(response)["query"]["results"]["channel"]["item"]
+    JSON.parse(response, object_class: OpenStruct).query.results.channel.item
   end
 end
 
